@@ -1,0 +1,88 @@
+# Conky, a system monitor, based on torsmo
+
+alignment middle_right
+background no
+use_xft yes
+font Dejavu Sans:size=8
+xftalpha 0
+update_interval 2.0
+total_run_times 0
+own_window yes
+own_window_transparent no
+own_window_type desktop
+own_window_argb_visual yes
+own_window_argb_value 120
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 4000 0
+maximum_width 330
+draw_shades no
+draw_outline yes
+draw_borders no
+draw_graph_borders no
+default_color 999999
+default_shade_color black
+default_outline_color black
+alignment middle_right
+gap_x 4
+gap_y 0
+no_buffers yes
+cpu_avg_samples 2
+text_buffer_size 1024
+override_utf8_locale yes
+uppercase no
+double_buffer yes
+
+TEXT
+N E T W O R K${alignr}${downspeed wlp2s0}
+$hr
+${color0}Public IP: ${color grey60}${execi 3600 curl -s http://checkip.dyndns.org/ | awk '/:/ {print $6}' | cut -d "<" -f1 }
+${color0}Private IP: ${color grey60}${addr wlp2s0}
+#${color0}IP: ${color grey60}${execpi 3600 wget -q -O - checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//';}|${addr wlp2s0}
+${color0}Gateway IP: ${color grey60}$gw_ip
+${color0}DNS: ${color grey60}$nameserver
+${if_up wlp2s0}${color0}Wi-fi IP: ${color grey60}${addr wlp2s0}
+${color0}Signal: ${color grey60}${wireless_link_qual_perc wlp2s0}${goto 95}% ${goto 112}${wireless_link_bar wlp2s0}${else}${color0}No wlan0$endif
+${color0}${goto 20}Down speed: ${color grey60}${downspeed wlp2s0} ${goto 200}${color0}Up speed: ${color grey60}${upspeed wlp2s0}
+${color grey60}${downspeedgraph wlp2s0 10,150 FF6600 00FF00 -t} ${alignr}${color grey60}${upspeedgraph wlp2s0 10,150 0000CC FF0000 -t}
+${color0}Total down: ${color grey60}${totaldown wlp2s0} ${goto 180}${color0}Total up: ${color grey60}${totalup wlp2s0}
+${color0}Activity:  ${hr 2}
+${color0}Inbound connections: ${color grey60}${tcp_portmon 1 32767 count}
+${color0}Outbound connections: ${color grey60}${tcp_portmon 32768 61000 count}
+${color0}Proto  ${goto 63}Foreign Address ${goto 230}Name
+${color grey60} ${execi 3 bash ~/.netstat.sh 1 proto}${goto 63}${execi 3 bash ~/.netstat.sh 1 address}${goto 230}${execi 3 bash ~/.netstat.sh 1 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 2 proto}${goto 63}${execi 3 bash ~/.netstat.sh 2 address}${goto 230}${execi 3 bash ~/.netstat.sh 2 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 3 proto}${goto 63}${execi 3 bash ~/.netstat.sh 3 address}${goto 230}${execi 3 bash ~/.netstat.sh 3 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 4 proto}${goto 63}${execi 3 bash ~/.netstat.sh 4 address}${goto 230}${execi 3 bash ~/.netstat.sh 4 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 5 proto}${goto 63}${execi 3 bash ~/.netstat.sh 5 address}${goto 230}${execi 3 bash ~/.netstat.sh 5 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 6 proto}${goto 63}${execi 3 bash ~/.netstat.sh 6 address}${goto 230}${execi 3 bash ~/.netstat.sh 6 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 7 proto}${goto 63}${execi 3 bash ~/.netstat.sh 7 address}${goto 230}${execi 3 bash ~/.netstat.sh 7 name}
+${color grey60} ${execi 3 bash ~/.netstat.sh 8 proto}${goto 63}${execi 3 bash ~/.netstat.sh 8 address}${goto 230}${execi 3 bash ~/.netstat.sh 8 name}
+
+B A T T E R Y
+$hr
+${color0}Status: ${color grey60}${execi 60 cat /sys/class/power_supply/BAT0/status} ${goto 190}${battery_bar 10,147 BAT0} ${if_match ${battery_percent BAT0} >= 50 }${goto 255}${color 222222}${battery_percent BAT0}%${color}${endif} ${if_match ${battery_percent BAT0} < 50 }${goto 255}${color0}${battery_percent BAT0}%${color}${endif}
+${color0}Adapter: ${color grey60}${acpiacadapter}
+${color0}Time: ${color grey60}${battery_time BAT0}
+
+R S S
+$hr
+${color0}${rss http://blog.desdelinux.net/feed/ 5 feed_title}${hr 2}
+${color orange}→ ${color grey60}${rss http://blog.desdelinux.net/feed/ 5 item_title 0}
+${color orange}→ ${color grey60}${rss http://blog.desdelinux.net/feed/ 5 item_title 1}
+${color orange}→ ${color grey60}${rss http://blog.desdelinux.net/feed/ 5 item_title 2}
+
+${color0}${rss http://www.muylinux.com/feed/ 5 feed_title}${hr 2}
+${color orange}→ ${color grey60}${rss http://www.muylinux.com/feed/ 5 item_title 0}
+${color orange}→ ${color grey60}${rss http://www.muylinux.com/feed/ 5 item_title 1}
+${color orange}→ ${color grey60}${rss http://www.muylinux.com/feed/ 5 item_title 2}
+
+${color0}${rss http://lamiradadelreplicante.com/feed/ 5 feed_title}${hr 2}
+${color orange}→ ${color grey60}${rss http://lamiradadelreplicante.com/feed/ 5 item_title 0}
+${color orange}→ ${color grey60}${rss http://lamiradadelreplicante.com/feed/ 5 item_title 1}
+${color orange}→ ${color grey60}${rss http://lamiradadelreplicante.com/feed/ 5 item_title 2}
+
+${color0}${rss http://elandroidelibre.com/feed/ 5 feed_title}${hr 2}
+${color orange}→ ${color grey60}${rss http://elandroidelibre.com/feed/ 5 item_title 0}
+${color orange}→ ${color grey60}${rss http://elandroidelibre.com/feed/ 5 item_title 1}
+${color orange}→ ${color grey60}${rss http://elandroidelibre.com/feed/ 5 item_title 2}

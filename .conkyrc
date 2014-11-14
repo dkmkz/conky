@@ -1,0 +1,80 @@
+# Conky, a system monitor, based on torsmo
+
+alignment middle_left
+background no
+use_xft yes
+font Dejavu Sans:size=8
+xftalpha 0
+update_interval 1
+total_run_times 0
+own_window yes
+own_window_transparent no
+own_window_type desktop
+own_window_argb_visual yes
+own_window_argb_value 120
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 500 0
+maximum_width 330
+draw_shades no
+draw_outline yes
+draw_borders no
+draw_graph_borders no
+default_color 999999
+default_shade_color black
+default_outline_color black
+alignment middle_left
+gap_x 4
+gap_y 0
+no_buffers yes
+cpu_avg_samples 2
+text_buffer_size 1024
+override_utf8_locale yes
+uppercase no
+double_buffer yes
+
+TEXT
+C P U$alignr ${cpu cpu0}% $alignr ${cpu cpu1}%
+$hr
+${color0}CPU Core 1: ${color grey60}${freq 1}MHz ${color0} Load: ${color grey60}${cpu cpu1}%${color0}${goto 260}
+${color grey60}${cpugraph cpu1 10,330 F0FF0A FF0A0D -t}
+${color0}CPU Core 2: ${color grey60}${freq 2}MHz ${color0} Load: ${color grey60}${cpu cpu2}%${color0}${goto 260}
+${color grey60}${cpugraph cpu2 10,330 0A11FF 0AFF29 -t}
+
+T O P   C P U
+$hr
+Process$alignr CPU% MEM%
+${top name 1}$alignr${top cpu 1}   ${top mem 1}
+${top name 2}$alignr${top cpu 2}   ${top mem 2}
+${top name 3}$alignr${top cpu 3}   ${top mem 3}
+
+R A M$alignr $memperc%    
+$hr
+${color0} Total${goto 85}Free${goto 145}Buffers${goto 215}Cached${goto 290}Used
+${color grey60}$memmax${goto 75}$memfree${goto 145}$buffers${goto 215}$cached${alignr}$mem
+
+T O P   R A M
+$hr
+Process $alignr CPU% MEM%
+${top_mem name 1}$alignr${top_mem cpu 1}   ${top_mem mem 1}
+${top_mem name 2}$alignr${top_mem cpu 2}   ${top_mem mem 2}
+${top_mem name 3}$alignr${top_mem cpu 3}   ${top_mem mem 3}
+
+S W A P$alignr $swapperc%
+$hr
+${color0}  ${goto 85}Used${goto 145}Free${goto 215}Total${goto 290}Percent
+${color0}Swap${color grey60}${goto 75}${swap}${goto 140}${swapfree}${goto 205}${swapmax}${goto 265}${swapbar 12,72}${goto 295}${color0}${swapperc}%
+
+P A C M A N
+$hr
+${color #E32F0F}${execpi 3600 checkupdates | wc -l}${color grey}
+
+S T O R A G E
+$hr
+${color0}  ${goto 85}Free${goto 145}Used${goto 215}Total${goto 290}Percent
+${color0}Root${color grey60}${goto 75}${fs_free /}${goto 140}${fs_used /}${goto 205}${fs_size /}${goto 265}${fs_bar 12,72 /}${goto 295}${color0}${fs_used_perc /}%
+${color0}Therion${color grey60}${goto 140}${fs_used /home/daniel}${goto 75}${fs_free /home/daniel}${goto 205}${fs_size /home/daniel}${goto 265}${fs_bar 12,72 /home/daniel}${color0}${goto 295}${fs_used_perc /home/daniel}%
+
+C A L E N D A R
+$hr
+${font Liberation Mono:size=8}${voffset 3}${color0}${execpi 3600 DJS=`date +%_d`; cal -m | sed s/"\(^\|[^0-9]\)$DJS"'\b'/'\1${color orange}'"$DJS"'$color'/ }$font
